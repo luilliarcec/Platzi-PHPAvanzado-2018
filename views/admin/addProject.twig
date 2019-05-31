@@ -1,0 +1,50 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+    <h1 class="mb-4 col-8">Add Projects</h1>
+    <form action="" method="post" class="col-8" enctype="multipart/form-data">
+        <div class="alert alert-{% if responseMessage == 'Guardado' %}success{% else %}danger{% endif %}"
+                {% if responseMessage == null %} hidden {% endif %}>
+            {{ responseMessage }}
+        </div>
+
+        <div class="form-group">
+            <label for="input-title">Title:</label>
+            <input type="text" class="form-control" id="input-title" name="title">
+        </div>
+
+        <div class="form-group">
+            <label for="input-description">Description:</label>
+            <input type="text" class="form-control" id="input-description" name="description">
+        </div>
+
+        <div class="form-group form-inline">
+            <label for="inputTickets" class="col-form-label mr-2">Meses: </label>
+            <input type="number" class="form-control col-3" id="inputTickets" min="0" value="0" name="tiempo">
+        </div>
+
+        <div class="form-group">
+            <label>Selecciona un archivo:</label>
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="customFile" name="image">
+                <label class="custom-file-label" for="customFile">Choose file</label>
+            </div>
+        </div>
+
+        <div class="form-group custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="customCheck1" name="visible" value="true" checked>
+            <label class="custom-control-label" for="customCheck1">Visible</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            bsCustomFileInput.init()
+        })
+    </script>
+{% endblock %}

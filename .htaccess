@@ -1,0 +1,26 @@
+# Archivo de configuración de APACHE
+RewriteEngine On # Habilitar motor Rewrite
+
+# Evalúa la url de la petición recibida, verificando si contiene
+# “/public/(Cualquier caracter distinto a espacio y signo de interrogación, que esté 0 o más veces)”,
+# no sensible a mayúsculas y minúsculas.
+RewriteCond %{THE_REQUEST} /public/([^\s?]*) [NC] # Reescribe la condición
+
+# [NE] = Do not escape special URL characters in output. No escapar los caracteres especiales
+# [R=302] = permanent redirect to new URL. En este caso, con código 302
+# [L] = Last - stop processing rules. Ya no siga evaluando las reglas que siguen abajo en el archivo .htaccess (RewriteRule) en caso que RewriteRule coincida con la url
+
+# Reemplaza toda la url después de public/ en adelante, por todo lo encontrado en RewriteCond,
+# en este caso, lo que está en paréntesis ([^\s?]*), indicando que es la última regla a evaluar en el htccess ([L]),
+# sin escapar caracteres especiales ([NE]) y devolviendo un 302 redireccionando a la nueva url indicada ([R=302]).
+RewriteRule ^ %1 [L,NE,R=302]
+
+# [L] = Last - stop processing rules. Ya no siga evaluando las reglas que siguen abajo en el archivo .htaccess (RewriteRule) en caso que RewriteRule coincida con la url
+# [NC] = Not Case Sensitive. Es para que en %{THE_REQUEST} tome en cuenta lo escrito, esté en mayúsculas o no.
+RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
+
+#RewriteEngine On
+# Evitar ciclos
+#RewriteCond %{THE_REQUEST} /public/([^\s?]*) [NC]
+#RewriteRule ^ %1 [L,NE,R=302]
+#RewriteRule ^((?!public/).*)$ public/$1 [L,NC]

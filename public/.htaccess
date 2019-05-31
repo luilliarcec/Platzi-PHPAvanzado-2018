@@ -1,0 +1,20 @@
+# RewriteEngine -> ES PARA INICIALIZAR
+# RewriteCond -> ES UNA CONDICIÓN
+# RewriteRule -> ES UNA REGLA
+
+RewriteEngine On
+
+# Si [%] el archivo que se pide [(REQUEST_FILENAME)] No [!] es un directorio [-d]
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Si [%] el archivo que se pide [(REQUEST_FILENAME)] No [!] existe o no es un archivo [-f]
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Todo lo que venga irá a index.php
+# [QSA] = toma todos los parámetros pasados por GET, y los incluye en la redirección. También combina parámetros de la url original con la nueva.
+# Ej:
+# url original: hola.com/index.php?var=val
+# url destino: hola.com/public/?nuevo=1
+# Url final: hola.com/public/?nuevo=1&var=val
+# [L] = Last - stop processing rules. Ya no siga evaluando las reglas que siguen abajo en el archivo .htaccess (RewriteRule) en caso que RewriteRule coincida con la url
+RewriteRule ^ index.php [QSA,L]
