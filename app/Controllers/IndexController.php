@@ -18,15 +18,6 @@ class IndexController extends BaseController
             return $job['months'] < $limitMonths;
         };
 
-        // Closure dentro de una funcion
-//        $jobs = array_filter($jobs->toArray(), function ($job) use ($limitMonths) {
-//            return $job['months'] > $limitMonths;
-//        });
-
-        // No permite usar el trait
-//        $jobs = array_filter($jobs->toArray(), $filterFunc);
-
-        // Permite usar trait de manera correcta y elimina todos los que cumplan la condicion en nuestra lista de jobs
         $jobs = $jobs->reject($filterFunc);
 
         $lastname = 'Arce';
@@ -37,5 +28,10 @@ class IndexController extends BaseController
             'jobs' => $jobs,
             'projects' => $projects,
         ]);
+    }
+
+    public function get404()
+    {
+        return $this->renderHTML('404.twig'); // No implementado
     }
 }

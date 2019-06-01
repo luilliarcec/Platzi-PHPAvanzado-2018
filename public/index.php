@@ -89,6 +89,12 @@ $map->post('saveJobs', BASE_URL . 'jobs/add', [
     'action' => 'getAddJobAction',
     'auth' => true
 ]);
+
+$map->get('deleteJobs', BASE_URL . 'jobs/delete', [
+    'controller' => 'App\Controllers\JobsController',
+    'action' => 'deleteAction',
+    'auth' => true
+]);
 /** FIN DE RUTA DE JOBS **/
 
 /** RUTA DE PROJECTS **/
