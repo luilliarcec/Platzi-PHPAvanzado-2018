@@ -95,6 +95,18 @@ $map->get('deleteJobs', BASE_URL . 'jobs/delete', [
     'action' => 'deleteAction',
     'auth' => true
 ]);
+
+$map->get('restoreJobs', BASE_URL . 'jobs/restore', [
+    'controller' => 'App\Controllers\JobsController',
+    'action' => 'restoreAction',
+    'auth' => true
+]);
+
+$map->get('hardDeleteJobs', BASE_URL . 'jobs/remove', [
+    'controller' => 'App\Controllers\JobsController',
+    'action' => 'hardDeleteAction',
+    'auth' => true
+]);
 /** FIN DE RUTA DE JOBS **/
 
 /** RUTA DE PROJECTS **/

@@ -12,7 +12,7 @@ class JobsController extends BaseController
 {
     public function getIndex()
     {
-        $jobs = Job::all();
+        $jobs = Job::withTrashed()->get();
         return $this->renderHTML('admin/jobs/index.twig', compact('jobs'));
     }
 
@@ -56,11 +56,33 @@ class JobsController extends BaseController
         ]);
     }
 
-    public function deleteAction (ServerRequest $request) {
+    public function deleteAction(ServerRequest $request)
+    {
         $params = $request->getQueryParams();
         $job = Job::find($params['id']);
-        $job->delete();
+        if ($job) {
+            $job->delete();
+        }
+        return new RedirectResponse('/jobs');
+    }
 
+    public function hardDeleteAction(ServerRequest $request)
+    {
+        $params = $request->getQueryParams();
+        $job = Job::withTrashed()->where('id', $params['id']);
+        if ($job) {
+            $job->forceDelete();
+        }
+        return new RedirectResponse('/jobs');
+    }
+
+    public function restoreAction(ServerRequest $request)
+    {
+        $params = $request->getQueryParams();
+        $job = Job::onlyTrashed()->where('id', $params['id']);
+        if ($job) {
+            $job->restore();
+        }
         return new RedirectResponse('/jobs');
     }
 }

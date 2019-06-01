@@ -6,14 +6,15 @@ namespace App\Models;
 
 use App\Traits\HasDefaultImage;
 use Illuminate\Database\Eloquent\Model;
-//require_once('BaseElement.php');
-//require_once('Printable.php');
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Job extends Model
 {
     use HasDefaultImage;
+    use SoftDeletes;
+
     protected $table = 'jobs';
-//    public $timestamps = false; //Quita la obligación a created_at y updated_at
 
     function getDurationAsString()
     {

@@ -16,7 +16,16 @@
                     <td>{{ job.title }}</td>
                     <td>
                         <a href="jobs/edit?id={{ job.id }}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
-                        <a href="jobs/delete?id={{ job.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                        {% if not (job.deleted_at) %}
+                            <a href="jobs/delete?id={{ job.id }}" class="btn btn-warning"><i
+                                        class="fas fa-trash-alt"></i></a>
+                        {% endif %}
+                        {% if (job.deleted_at) %}
+                            <a href="jobs/restore?id={{ job.id }}" class="btn btn-success"><i
+                                        class="fas fa-trash-restore-alt"></i></a>
+                        {% endif %}
+                        <a href="jobs/remove?id={{ job.id }}" class="btn btn-danger"><i
+                                    class="fas fa-trash-alt"></i></a>
                     </td>
                 </tr>
             {% endfor %}
