@@ -13,7 +13,7 @@ class ProjectsController extends BaseController
 {
     public function getAddProject()
     {
-        return $this->renderHTML('admin/addProject.twig');
+        return $this->renderHTML('admin/projects/addProject.twig');
     }
 
     public function postSaveProject(ServerRequest $request)
@@ -48,7 +48,7 @@ class ProjectsController extends BaseController
             $responseMessage = $e->getMessage();
         }
 
-        return $this->renderHTML('admin/addProject.twig', [
+        return $this->renderHTML('admin/projects/addProject.twig', [
             'responseMessage' => $responseMessage
         ]);
     }

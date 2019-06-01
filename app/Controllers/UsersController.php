@@ -13,7 +13,7 @@ class UsersController extends BaseController
 {
     public function getAddUser()
     {
-        return $this->renderHTML('admin/addUser.twig');
+        return $this->renderHTML('admin/users/addUser.twig');
     }
 
     public function postSaveUser(ServerRequest $request)
@@ -43,7 +43,7 @@ class UsersController extends BaseController
             ]);
         }
 
-        return $this->renderHTML('admin/addUser.twig', [
+        return $this->renderHTML('admin/users/addUser.twig', [
             'message' => $message,
             'errors' => $errors,
         ]);

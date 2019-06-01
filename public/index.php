@@ -70,6 +70,14 @@ $map->get('logout', BASE_URL . 'logout', [
 ]);
 
 // RUTAS DE ADMIN
+
+/** RUTA DE JOBS **/
+$map->get('indexJobs', BASE_URL . 'jobs', [
+    'controller' => 'App\Controllers\JobsController',
+    'action' => 'getIndex',
+    'auth' => true
+]);
+
 $map->get('addJobs', BASE_URL . 'jobs/add', [
     'controller' => 'App\Controllers\JobsController',
     'action' => 'getAddJobAction',
@@ -81,7 +89,9 @@ $map->post('saveJobs', BASE_URL . 'jobs/add', [
     'action' => 'getAddJobAction',
     'auth' => true
 ]);
+/** FIN DE RUTA DE JOBS **/
 
+/** RUTA DE PROJECTS **/
 $map->get('addProjects', BASE_URL . 'projects/add', [
     'controller' => 'App\Controllers\ProjectsController',
     'action' => 'getAddProject',
@@ -93,6 +103,7 @@ $map->post('saveProjects', BASE_URL . 'projects/add', [
     'action' => 'postSaveProject',
     'auth' => true
 ]);
+/** FIN DE RUTA DE PROJECTS **/
 
 $map->get('addUser', BASE_URL . 'users/add', [
     'controller' => 'App\Controllers\UsersController',

@@ -9,6 +9,12 @@ use Zend\Diactoros\ServerRequest;
 
 class JobsController extends BaseController
 {
+    public function getIndex()
+    {
+        $jobs = Job::all();
+        return $this->renderHTML('admin/jobs/index.twig', compact('jobs'));
+    }
+
     public function getAddJobAction(ServerRequest $request)
     {
         $responseMessage = null;
@@ -44,7 +50,7 @@ class JobsController extends BaseController
             }
         }
 
-        return $this->renderHTML('admin/addJob.twig', [
+        return $this->renderHTML('admin/jobs/addJob.twig', [
             'responseMessage' => $responseMessage
         ]);
     }

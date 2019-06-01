@@ -1,0 +1,27 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+    <h1>Lista de Jobs</h1>
+    <div class="row mb-4 offset-10 offset-sm-11">
+        <a href="jobs/add" class="btn btn-success">New</a>
+    </div>
+    <div class="row">
+        <table class="table">
+            <tr>
+                <th>Title</th>
+                <th>Options</th>
+            </tr>
+            {% for job in jobs %}
+                <tr>
+                    <td>{{ job.title }}</td>
+                    <td>
+                        <a href="jobs/edit?id={{ job.id }}" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                        <a href="jobs/delete?id={{ job.id }}" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <a href="admin">Logout</a>
+{% endblock %}
