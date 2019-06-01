@@ -37,23 +37,18 @@
         <div class="col">
             <div>
                 <h3 class="border-bottom-gray">Work Experience</h3>
-                <ul>
-                    {% for job in jobs %}
-                        <li class='work-position'>
+                {% for job in jobs %}
+                    <div class="row work-position">
+                        <div class="col-12 col-md-3">
+                            <img id="profile-picture" src="{{ job.imageUrl }}" alt="imagen del trabajo">
+                        </div>
+                        <div class="col">
                             <h5>{{ job.title }}</h5>
-                            <p>{{ job.description }}</p>
-                            <p>Meses / Años / Días</p>
-                            <img src="{{ job.imageUrl }}"
-                                 alt="imagen del trabajo" style="width:200px; height:200px;">
-                            <strong>Achievements:</strong>
-                            <ul>
-                                <li>Lorem ipsum dolor sit amet, 80% consectetuer adipiscing elit.</li>
-                                <li>Lorem ipsum dolor sit amet, 80% consectetuer adipiscing elit.</li>
-                                <li>Lorem ipsum dolor sit amet, 80% consectetuer adipiscing elit.</li>
-                            </ul>
-                        </li>
-                    {% endfor %}
-                </ul>
+                            <p class="mb-0">{{ job.description }}</p>
+                            <p>{{ job.months }} meses</p>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
             <div>
                 <h3 class="border-bottom-gray">Projects</h3>

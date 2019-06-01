@@ -97,13 +97,13 @@ $map->post('saveProjects', BASE_URL . 'projects/add', [
 $map->get('addUser', BASE_URL . 'users/add', [
     'controller' => 'App\Controllers\UsersController',
     'action' => 'getAddUser',
-    'auth' => true
+//    'auth' => true
 ]);
 
 $map->post('saveUsers', BASE_URL . 'users/add', [
     'controller' => 'App\Controllers\UsersController',
     'action' => 'postSaveUser',
-    'auth' => true
+//    'auth' => true
 ]);
 
 $map->get('admin', BASE_URL . 'admin', [

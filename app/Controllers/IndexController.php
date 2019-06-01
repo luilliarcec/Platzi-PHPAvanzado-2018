@@ -8,13 +8,26 @@ class IndexController extends BaseController
 {
     public function IndexAction()
     {
-        
+
         $jobs = Job::all();
         $projects = Project::all();
 
+        $limitMonths = 8;
+
+        // Closure o funciones anonimas dentro de una variable
+        $filterFunc = function ($job) use ($limitMonths) {
+            return $job['months'] > $limitMonths;
+        };
+
+        // Closure dentro de una funcion
+//        $jobs = array_filter($jobs->toArray(), function ($job) use ($limitMonths) {
+//            return $job['months'] > $limitMonths;
+//        });
+
+        $jobs = array_filter($jobs->toArray(), $filterFunc);
+
         $lastname = 'Arce';
         $name = "Luis $lastname";
-        $limitMonths = 2000;
 
         return $this->renderHTML('index.twig', [
             'name' => $name,
