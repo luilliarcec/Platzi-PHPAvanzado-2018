@@ -11,6 +11,9 @@
     "twig/twig": "^2.10",
     "respect/validation": "^1.1",
     "vlucas/phpdotenv": "^3.3",
-    "php-di/php-di": "^6.0"
+    "php-di/php-di": "^6.0",
+    "woohoolabs/harmony": "^6.0",
+    "zendframework/zend-httphandlerrunner": "^1.1",
+    "middlewares/aura-router": "^1.1"
   }
 }

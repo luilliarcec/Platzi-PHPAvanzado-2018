@@ -16,6 +16,12 @@ define('BASE_URL', '/');
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Aura\Router\RouterContainer;
+use Middlewares\AuraRouter;
+use WoohooLabs\Harmony\Harmony;
+use WoohooLabs\Harmony\Middleware\DispatcherMiddleware;
+use WoohooLabs\Harmony\Middleware\HttpHandlerRunnerMiddleware;
+use Zend\Diactoros\Response;
+use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
 
 $container = new DI\Container();
 
@@ -52,95 +58,84 @@ $routerContainer = new RouterContainer();
 $map = $routerContainer->getMap();
 
 $map->get('index', BASE_URL, [
-    'controller' => 'App\Controllers\IndexController',
-    'action' => 'IndexAction'
+    'App\Controllers\IndexController',
+    'IndexAction'
 ]);
 
 $map->get('loginForm', BASE_URL . 'login', [
-    'controller' => 'App\Controllers\AuthController',
-    'action' => 'getLogin'
+    'App\Controllers\AuthController',
+    'getLogin'
 ]);
 
 $map->post('auth', BASE_URL . 'auth', [
-    'controller' => 'App\Controllers\AuthController',
-    'action' => 'postLogin'
+    'App\Controllers\AuthController',
+    'postLogin'
 ]);
 
 $map->get('logout', BASE_URL . 'logout', [
-    'controller' => 'App\Controllers\AuthController',
-    'action' => 'getLogout'
+    'App\Controllers\AuthController',
+    'getLogout'
 ]);
 
 // RUTAS DE ADMIN
 
 /** RUTA DE JOBS **/
 $map->get('indexJobs', BASE_URL . 'jobs', [
-    'controller' => 'App\Controllers\JobsController',
-    'action' => 'getIndex',
-    'auth' => true
+    'App\Controllers\JobsController',
+    'getIndex'
 ]);
 
 $map->get('addJobs', BASE_URL . 'jobs/add', [
-    'controller' => 'App\Controllers\JobsController',
-    'action' => 'getAddJobAction',
-    'auth' => true
+    'App\Controllers\JobsController',
+    'getAddJobAction'
 ]);
 
 $map->post('saveJobs', BASE_URL . 'jobs/add', [
-    'controller' => 'App\Controllers\JobsController',
-    'action' => 'getAddJobAction',
-    'auth' => true
+    'App\Controllers\JobsController',
+    'getAddJobAction'
 ]);
 
 $map->get('deleteJobs', BASE_URL . 'jobs/delete', [
-    'controller' => 'App\Controllers\JobsController',
-    'action' => 'deleteAction',
-    'auth' => true
+    'App\Controllers\JobsController',
+    'deleteAction'
 ]);
 
 $map->get('restoreJobs', BASE_URL . 'jobs/restore', [
-    'controller' => 'App\Controllers\JobsController',
-    'action' => 'restoreAction',
-    'auth' => true
+    'App\Controllers\JobsController',
+    'restoreAction'
 ]);
 
 $map->get('hardDeleteJobs', BASE_URL . 'jobs/remove', [
-    'controller' => 'App\Controllers\JobsController',
-    'action' => 'hardDeleteAction',
-    'auth' => true
+    'App\Controllers\JobsController',
+    'hardDeleteAction'
 ]);
 /** FIN DE RUTA DE JOBS **/
 
 /** RUTA DE PROJECTS **/
 $map->get('addProjects', BASE_URL . 'projects/add', [
-    'controller' => 'App\Controllers\ProjectsController',
-    'action' => 'getAddProject',
-    'auth' => true
+    'App\Controllers\ProjectsController',
+    'getAddProject'
 ]);
 
 $map->post('saveProjects', BASE_URL . 'projects/add', [
-    'controller' => 'App\Controllers\ProjectsController',
-    'action' => 'postSaveProject',
-    'auth' => true
+    'App\Controllers\ProjectsController',
+    'postSaveProject'
 ]);
 /** FIN DE RUTA DE PROJECTS **/
 
 $map->get('addUser', BASE_URL . 'users/add', [
-    'controller' => 'App\Controllers\UsersController',
-    'action' => 'getAddUser',
-//    'auth' => true
+    'App\Controllers\UsersController',
+    'getAddUser'
 ]);
 
 $map->post('saveUsers', BASE_URL . 'users/add', [
-    'controller' => 'App\Controllers\UsersController',
-    'action' => 'postSaveUser',
-//    'auth' => true
+    'App\Controllers\UsersController',
+    'postSaveUser'
 ]);
 
 $map->get('admin', BASE_URL . 'admin', [
-    'controller' => 'App\Controllers\AdminController',
-    'action' => 'getIndex',
-    'auth' => true
+    'App\Controllers\AdminController',
+    'getIndex'
 ]);
 // FIN RUTAS DE ADMIN
 
@@ -151,30 +146,25 @@ $route = $matcher->match($request);
 if (!$route) {
     echo('No route'); //Poner pag 404
 } else {
-    $handlerData = $route->handler;
-    $controllerName = $handlerData['controller'];
-    $actionName = $handlerData['action'];
+//    $handlerData = $route->handler;
+//    $controllerName = $handlerData['controller'];
+//    $actionName = $handlerData['action'];
 
-    $needsAuth = $handlerData['auth'] ?? false;
-    $session = $_SESSION['userId'] ?? null;
+//    $needsAuth = $handlerData['auth'] ?? false;
+//    $session = $_SESSION['userId'] ?? null;
+//
+//    if ($needsAuth && !$session) {
+//        $controllerName = 'App\Controllers\AuthController';
+//        $actionName = 'getLogout';
+//    } elseif ($actionName == 'getLogin' && $session) {
+//        $controllerName = 'App\Controllers\AuthController';
+//        $actionName = 'getAdmin';
+//    }
 
-    if ($needsAuth && !$session) {
-        $controllerName = 'App\Controllers\AuthController';
-        $actionName = 'getLogout';
-    } elseif ($actionName == 'getLogin' && $session) {
-        $controllerName = 'App\Controllers\AuthController';
-        $actionName = 'getAdmin';
-    }
-
-    $controller = $container->get($controllerName);
-    $response = $controller->$actionName($request);
-
-    foreach ($response->getHeaders() as $name => $values) {
-        foreach ($values as $value) {
-            header(sprintf('%s: %s', $name, $value), false);
-        }
-    }
-
-    http_response_code($response->getStatusCode());
-    echo($response->getBody());
+    $harmony = new Harmony($request, new Response());
+    $harmony
+        ->addMiddleware(new HttpHandlerRunnerMiddleware(new SapiEmitter()))
+        ->addMiddleware(new AuraRouter($routerContainer))
+        ->addMiddleware(new DispatcherMiddleware($container, 'request-handler'));
+    $harmony();
 }
