@@ -29,7 +29,7 @@ class AuthenticationMiddleware implements MiddlewareInterface
         $session = $_SESSION['userId'] ?? null;
         if ($request->getUri()->getPath() === '/admin') {
             if (!$session) {
-                return new RedirectResponse('\login');
+                return new RedirectResponse('/login');
 //                return new EmptyResponse(401);
             }
         }

@@ -21,8 +21,8 @@ class BaseController
         ]);
     }
 
-    public function renderHTML($fileName, $data = [])
+    public function renderHTML($fileName, $data = [], $status = 200)
     {
-        return new HtmlResponse($this->templateEngine->render($fileName, $data));
+        return new HtmlResponse($this->templateEngine->render($fileName, $data), $status);
     }
 }

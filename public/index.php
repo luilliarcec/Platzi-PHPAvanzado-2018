@@ -25,6 +25,7 @@ use Zend\Diactoros\Response;
 use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
 
 $container = new DI\Container();
+$errorsResponse = new \App\Controllers\BaseController();
 
 $capsule = new Capsule;
 
@@ -145,17 +146,34 @@ $matcher = $routerContainer->getMatcher();
 $route = $matcher->match($request);
 
 if (!$route) {
-    echo('No route'); //Poner pag 404
+    $emitter = new SapiEmitter();
+    $emitter->emit($errorsResponse->renderHTML('errors.twig', [
+        'code' => 404,
+        'title' => 'Página no encontrada',
+        'message' => 'Está página está fuera de nuestra galaxia :O. ¡No podemos acceder a ella :C!.'
+    ]), 404);
 } else {
-//    $handlerData = $route->handler;
-//    $controllerName = $handlerData['controller'];
-//    $actionName = $handlerData['action'];
-
-    $harmony = new Harmony($request, new Response());
-    $harmony
-        ->addMiddleware(new HttpHandlerRunnerMiddleware(new SapiEmitter()))
-        ->addMiddleware(new AuthenticationMiddleware())
-        ->addMiddleware(new AuraRouter($routerContainer))
-        ->addMiddleware(new DispatcherMiddleware($container, 'request-handler'));
-    $harmony();
+    try{
+        $harmony = new Harmony($request, new Response());
+        $harmony
+            ->addMiddleware(new HttpHandlerRunnerMiddleware(new SapiEmitter()))
+            ->addMiddleware(new AuthenticationMiddleware())
+            ->addMiddleware(new AuraRouter($routerContainer))
+            ->addMiddleware(new DispatcherMiddleware($container, 'request-handler'));
+        $harmony();
+    } catch (Exception $e){
+        $emitter = new SapiEmitter();
+        $emitter->emit($errorsResponse->renderHTML('errors.twig', [
+            'code' => 400,
+            'title' => 'Página no encontrada',
+            'message' => 'Se a especificado un valor que no se a encontrado.'
+        ]), 400);
+    } catch (Error $e) {
+        $emitter = new SapiEmitter();
+        $emitter->emit($errorsResponse->renderHTML('errors.twig', [
+            'code' => 500,
+            'title' => 'Error en el servidor',
+            'message' => 'Estamos trabajando para corregir este error.'
+        ]), 400);
+    }
 }
