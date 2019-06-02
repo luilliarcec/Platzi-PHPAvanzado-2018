@@ -14,6 +14,7 @@ $dotenv->load();
 
 define('BASE_URL', '/');
 
+use App\Middlewares\AuthenticationMiddleware;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Aura\Router\RouterContainer;
 use Middlewares\AuraRouter;
@@ -150,20 +151,10 @@ if (!$route) {
 //    $controllerName = $handlerData['controller'];
 //    $actionName = $handlerData['action'];
 
-//    $needsAuth = $handlerData['auth'] ?? false;
-//    $session = $_SESSION['userId'] ?? null;
-//
-//    if ($needsAuth && !$session) {
-//        $controllerName = 'App\Controllers\AuthController';
-//        $actionName = 'getLogout';
-//    } elseif ($actionName == 'getLogin' && $session) {
-//        $controllerName = 'App\Controllers\AuthController';
-//        $actionName = 'getAdmin';
-//    }
-
     $harmony = new Harmony($request, new Response());
     $harmony
         ->addMiddleware(new HttpHandlerRunnerMiddleware(new SapiEmitter()))
+        ->addMiddleware(new AuthenticationMiddleware())
         ->addMiddleware(new AuraRouter($routerContainer))
         ->addMiddleware(new DispatcherMiddleware($container, 'request-handler'));
     $harmony();
