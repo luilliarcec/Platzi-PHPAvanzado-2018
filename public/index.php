@@ -15,6 +15,7 @@ $dotenv->load();
 define('BASE_URL', '/');
 
 use App\Middlewares\AuthenticationMiddleware;
+use Franzl\Middleware\Whoops\WhoopsMiddleware;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Aura\Router\RouterContainer;
 use Middlewares\AuraRouter;
@@ -157,6 +158,7 @@ if (!$route) {
         $harmony = new Harmony($request, new Response());
         $harmony
             ->addMiddleware(new HttpHandlerRunnerMiddleware(new SapiEmitter()))
+            ->addMiddleware(new WhoopsMiddleware())
             ->addMiddleware(new AuthenticationMiddleware())
             ->addMiddleware(new AuraRouter($routerContainer))
             ->addMiddleware(new DispatcherMiddleware($container, 'request-handler'));
