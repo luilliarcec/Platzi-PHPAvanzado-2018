@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Job;
+use App\Services\JobService;
 use Exception;
 use Respect\Validation\Validator as validation;
 use Zend\Diactoros\Response\RedirectResponse;
@@ -10,6 +11,14 @@ use Zend\Diactoros\ServerRequest;
 
 class JobsController extends BaseController
 {
+    private $jobService;
+
+    public function __construct(JobService $jobService)
+    {
+        parent::__construct();
+        $this->jobService = $jobService;
+    }
+
     public function getIndex()
     {
         $jobs = Job::withTrashed()->get();
@@ -59,10 +68,7 @@ class JobsController extends BaseController
     public function deleteAction(ServerRequest $request)
     {
         $params = $request->getQueryParams();
-        $job = Job::find($params['id']);
-        if ($job) {
-            $job->delete();
-        }
+        $this->jobService->deleteJob($params['id']);
         return new RedirectResponse('/jobs');
     }
 
