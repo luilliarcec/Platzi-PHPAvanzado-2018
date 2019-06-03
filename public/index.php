@@ -1,9 +1,4 @@
 <?php
-// Inicio bloque para mostrar errores (Solos ambiente de DESARROLLO)
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-// Fin bloque de errores
 
 require_once('../vendor/autoload.php');
 
@@ -11,6 +6,14 @@ session_start();
 
 $dotenv = Dotenv\Dotenv::create(__DIR__ . '/..');
 $dotenv->load();
+
+// Inicio bloque para mostrar errores (Solos ambiente de DESARROLLO)
+if (getenv('DEBUG') === 'true') {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+}
+// Fin bloque de errores
 
 define('BASE_URL', '/');
 
@@ -24,6 +27,12 @@ use WoohooLabs\Harmony\Middleware\DispatcherMiddleware;
 use WoohooLabs\Harmony\Middleware\HttpHandlerRunnerMiddleware;
 use Zend\Diactoros\Response;
 use Zend\HttpHandlerRunner\Emitter\SapiEmitter;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
+// create a log channel
+$log = new Logger('app');
+$log->pushHandler(new StreamHandler(__DIR__ . '/../logs/app.log', Logger::WARNING));
 
 $container = new DI\Container();
 $errorsResponse = new \App\Controllers\BaseController();
@@ -154,16 +163,20 @@ if (!$route) {
         'message' => 'Está página está fuera de nuestra galaxia :O. ¡No podemos acceder a ella :C!.'
     ]), 404);
 } else {
-    try{
+    try {
         $harmony = new Harmony($request, new Response());
         $harmony
-            ->addMiddleware(new HttpHandlerRunnerMiddleware(new SapiEmitter()))
-            ->addMiddleware(new WhoopsMiddleware())
+            ->addMiddleware(new HttpHandlerRunnerMiddleware(new SapiEmitter()));
+        if (getenv('DEBUG') === 'true') {
+            $harmony->addMiddleware(new WhoopsMiddleware());
+        }
+        $harmony
             ->addMiddleware(new AuthenticationMiddleware())
             ->addMiddleware(new AuraRouter($routerContainer))
             ->addMiddleware(new DispatcherMiddleware($container, 'request-handler'));
         $harmony();
-    } catch (Exception $e){
+    } catch (Exception $e) {
+        $log->warning($e->getMessage());
         $emitter = new SapiEmitter();
         $emitter->emit($errorsResponse->renderHTML('errors.twig', [
             'code' => 400,
@@ -171,6 +184,7 @@ if (!$route) {
             'message' => 'Se a especificado un valor que no se a encontrado.'
         ]), 400);
     } catch (Error $e) {
+        $log->error($e->getMessage());
         $emitter = new SapiEmitter();
         $emitter->emit($errorsResponse->renderHTML('errors.twig', [
             'code' => 500,

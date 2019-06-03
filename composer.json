@@ -16,6 +16,7 @@
     "zendframework/zend-httphandlerrunner": "^1.1",
     "middlewares/aura-router": "^1.1",
     "filp/whoops": "^2.3",
-    "franzl/whoops-middleware": "^1.1"
+    "franzl/whoops-middleware": "^1.1",
+    "monolog/monolog": "^1.24"
   }
 }
