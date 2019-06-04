@@ -50,7 +50,6 @@ class JobsController extends BaseController
                 $job->title = $postData['title'];
                 $job->description = $postData['description'];
                 $job->imageUrl = $rutaImg;
-                $job->visible = isset($postData['visible']) ? true : false;
                 $job->months = $postData['tiempo'];
                 $job->save();
 

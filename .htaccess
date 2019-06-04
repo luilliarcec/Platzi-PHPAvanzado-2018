@@ -10,7 +10,7 @@ RewriteCond %{THE_REQUEST} /public/([^\s?]*) [NC] # Reescribe la condición
 # [R=302] = permanent redirect to new URL. En este caso, con código 302
 # [L] = Last - stop processing rules. Ya no siga evaluando las reglas que siguen abajo en el archivo .htaccess (RewriteRule) en caso que RewriteRule coincida con la url
 
-# Reemplaza toda la url después de public/ en adelante, por todo lo encontrado en RewriteCond,
+# Reemplaza toda la url después de public/ en adelante, por t/odo lo encontrado en RewriteCond,
 # en este caso, lo que está en paréntesis ([^\s?]*), indicando que es la última regla a evaluar en el htccess ([L]),
 # sin escapar caracteres especiales ([NE]) y devolviendo un 302 redireccionando a la nueva url indicada ([R=302]).
 RewriteRule ^ %1 [L,NE,R=302]
