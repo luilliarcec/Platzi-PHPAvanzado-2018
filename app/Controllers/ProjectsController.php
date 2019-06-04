@@ -22,6 +22,8 @@ class ProjectsController extends BaseController
 
         $projectValidator = validation::key('title', validation::stringType()->notEmpty())
             ->key('description', validation::stringType()->notEmpty());
+//            ->key('months', validation::numeric()->positive())
+//            ->key('months', validation::intVal()->min(0, true));
 
         try {
             $projectValidator->assert($postData); // true
@@ -39,7 +41,6 @@ class ProjectsController extends BaseController
             $project->title = $postData['title'];
             $project->description = $postData['description'];
             $project->imageUrl = $rutaImg;
-            $project->visible = isset($postData['visible']) ? true : false;
             $project->months = $postData['tiempo'];
             $project->save();
 
