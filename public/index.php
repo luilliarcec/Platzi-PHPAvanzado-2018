@@ -135,6 +135,7 @@ $map->post('saveProjects', BASE_URL . 'projects/add', [
 ]);
 /** FIN DE RUTA DE PROJECTS **/
 
+/** RUTAS DE USERS */
 $map->get('addUser', BASE_URL . 'users/add', [
     'App\Controllers\UsersController',
     'getAddUser'
@@ -144,6 +145,19 @@ $map->post('saveUsers', BASE_URL . 'users/add', [
     'App\Controllers\UsersController',
     'postSaveUser'
 ]);
+/** FIN DE RUTAS DE USER */
+
+/** RUTAS DE CONTACTME */
+$map->get('contactForm', BASE_URL . 'contact', [
+    'App\Controllers\ContactController',
+    'index'
+]);
+
+$map->post('contactSent', BASE_URL . 'contact/sent', [
+    'App\Controllers\ContactController',
+    'sent'
+]);
+/** FIN DE RUTAS CONTACME */
 
 $map->get('admin', BASE_URL . 'admin', [
     'App\Controllers\AdminController',
